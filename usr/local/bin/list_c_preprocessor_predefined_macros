@@ -1,0 +1,2 @@
+#!/usr/bin/sh
+exec cpp -dM /dev/null

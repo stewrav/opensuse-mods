@@ -1,0 +1,13 @@
+#!/usr/bin/sed -nf
+# Executable sed script to remove duplicate blank lines
+# by Stewart Ravenhall
+
+/^[ 	]*$/!{
+	p
+	d
+}
+p
+:loop
+n
+/^[ 	]*$/bloop
+p

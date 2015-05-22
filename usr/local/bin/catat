@@ -1,0 +1,9 @@
+#!/usr/bin/sh
+# cat interesting parts of the specified "at" job
+
+if [[ $# != 1 ]]; then
+	print -u2 "Usage: ${0##*/} at_job"
+	exit 1
+else
+	sed '1,/^##Header: proto.template,v /d' /var/spool/cron/atjobs/$1
+fi

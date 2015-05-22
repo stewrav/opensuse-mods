@@ -1,0 +1,5 @@
+Run ./configure
+Remove fforce-mem from CFLAGS in Makefile
+make
+make check
+make install

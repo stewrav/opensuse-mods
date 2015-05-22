@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+for atjob in $(at -l | sed 's/[\t ].*//'); do
+	at -l $atjob
+	catat $atjob | sed 's/^/\t/'
+done

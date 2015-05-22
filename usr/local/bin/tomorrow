@@ -1,0 +1,18 @@
+#!/opt/BIOSTAT/bin/perl
+
+# Display the full name of the day of the week for tomorrow
+# e.g. if today is Monday then display "Tuesday"
+
+# Be ruthless with command syntax
+use warnings;
+use strict;
+
+# Allow the use of the "strftime" function
+# See "perldoc POSIX"
+use POSIX qw(strftime);
+
+# Define the number of seconds in a day
+my $seconds_per_day = 60 * 60 * 24;
+
+# Finally, display the day of the week for this time tomorrow
+print strftime('%A', localtime(time + $seconds_per_day)), "\n";

@@ -1,0 +1,28 @@
+#!/bin/sh
+# $Source$
+# $Id$
+# List directories, including symbolic links that point to directories
+# Written by Stewart Ravenhall
+# 15 August 2000
+
+# List all files, one per line, with trailing slash for directories
+ls -FA1 | sed -n '
+	# For lines that end with a slash -
+	/\/$/{
+		# Remove the trailing slash
+		s/\/$//
+		# Append the current pattern space to the hold space
+		H
+	}
+	# For the last line of input -
+	${
+		# Get hold space (over-writing pattern space)
+		g
+		# Remove leading and trailing newlines
+		s/^\n//
+		s/\n$//
+		# Swap all other newlines for spaces
+		s/\n/ /g
+		# Print the final result
+		p
+	}'

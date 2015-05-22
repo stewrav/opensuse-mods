@@ -1,0 +1,37 @@
+#!/opt/BIOSTAT/bin/perl
+# Written by Mark Jason Dominus
+
+# e.g. prompt$ at -l
+#      1201506360.a
+#      prompt$ localtime 1201506360
+#      Mon Jan 28 08:46:00 2008
+
+# e.g. prompt$ localtime -f 1089231416
+#      56 16 16 7 6 104 3 188 1
+
+if ($ARGV[0] eq '-f') {
+	*show_localtime = \&show_localtime_list;
+	shift;
+}
+
+if (@ARGV) {
+	for (@ARGV) {
+		print show_localtime($_), "\n";
+	}
+} else {
+	while (<>) {
+		s/^(\d+)/show_localtime($1)/e;
+		print;
+	}
+}
+
+sub show_localtime {
+	my $t = shift;
+	scalar localtime $t;
+}
+
+sub show_localtime_list {
+	my $t = shift;
+	my @a = localtime $t;
+	"@a\n"
+}

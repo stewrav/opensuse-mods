@@ -1,0 +1,23 @@
+#!/usr/bin/sh
+
+ls $@ | perl -lne 'printf "%4o %s\n", (stat($_))[2] & 4095, $_'
+
+# for perm in $(ls -ogd $1); do
+# 	perm=${perm#?}
+# 	n=
+# 	while [[ -n "$perm" ]]; do
+# 		case ${perm%${perm#???}} in
+# 			(---) n=${n}0 ;;
+# 			(--x) n=${n}1 ;;
+# 			(-w-) n=${n}2 ;;
+# 			(-wx) n=${n}3 ;;
+# 			(r--) n=${n}4 ;;
+# 			(r-x) n=${n}5 ;;
+# 			(rw-) n=${n}6 ;;
+# 			(rwx) n=${n}7 ;;
+# 		esac
+# 		perm=${perm#???}
+# 	done
+# 	break
+# done
+# print "$n"

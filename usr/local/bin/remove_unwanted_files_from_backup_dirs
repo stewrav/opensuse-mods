@@ -1,0 +1,34 @@
+#!/bin/bash
+
+function a {
+	for dir in *.backup
+	do
+		rm -rf $dir/Download*
+		rm -rf $dir/.kde4/share/apps/nepomuk
+		rm -rf $dir/.local/share/Trash
+		rm -rf $dir/.local/share/akonadi
+		rm -rf $dir/.mozilla
+		rm -rf $dir/.adobe
+		rm -rf $dir/.bash_history
+		rm -rf $dir/.cache
+		rm -rf $dir/.cddb
+		rm -rf $dir/.config
+		rm -rf $dir/.libreoffice
+		rm -rf $dir/.macromedia
+		rm -rf $dir/.mozilla
+		rm -rf $dir/.mplayer
+		rm -rf $dir/.skel
+		rm -rf $dir/.thumbnails
+		rm -rf $dir/.trash
+		rm -rf $dir/.viminfo
+		rm -rf $dir/.vimrc
+		rm -rf $dir/.wastebin
+		rm -rf $dir/.xinitrc.template
+		rm -rf $dir/.xsession-error*
+	done
+}
+
+cd -P /home || exit
+a
+cd -P /mnt/oldhome || exit
+a

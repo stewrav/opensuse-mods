@@ -1,0 +1,6 @@
+#!/usr/bin/sed -f
+# remove most HTML tags (accommodates multiple-line tags)
+:a
+s/<[^>]*>//g
+/</N
+//ba

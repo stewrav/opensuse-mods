@@ -1,0 +1,23 @@
+#!/opt/BIOSTAT/bin/perl
+# Written by Mark Jason Dominus
+# Quicker than typing
+# awk '{print $1}'
+# now you can just type
+# f 1
+# or even
+# f -1
+# for the last field
+
+my $field = shift or usage();
+$field -= 1 if $field > 0;
+
+while (<>) {
+	chomp;
+	my @f = split;
+	print $f[$field], "\n";
+}
+
+sub usage {
+	print STDERR "$0 fieldnumber\n"; 
+	exit 1;
+}

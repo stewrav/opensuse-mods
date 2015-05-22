@@ -1,0 +1,36 @@
+#!/usr/bin/sh
+
+############################################################
+#                  Create a 2GB file                       #
+############################################################
+#
+# Actually it is more useful to create a file that is 1B
+# short of 2GB (to see what works but then breaks when we
+# add another byte to the file) so that is what this script
+# does.
+#
+# For example:
+# gb2 /var/sastmp/my_2gb_file
+#
+# To make the file one byte larger (i.e. 2GB) just append a
+# byte; e.g.
+# print >> /var/sastmp/my_2gb_file
+#
+# 1024B = 1KB
+# 1024KB = 1MB
+# 1024MB = 1GB
+# thus
+# 1,073,741,824B = 1GB
+# 2,147,483,648B = 2GB
+############################################################
+
+if [[ $# != 1 ]]; then
+	print -u2 "Usage: ${0##*/} outputfile"
+	exit 1
+fi
+
+# Create a file that is 4096B short of 2GB
+dd if=/dev/zero of=$1 bs=4096 count=524287
+
+# Add 4095B
+seq 0 1040 >> $1
