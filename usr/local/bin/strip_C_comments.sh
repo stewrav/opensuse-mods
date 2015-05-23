@@ -1,7 +1,6 @@
 #!/bin/ksh
 # Strip C comments
 # by Stewart Ravenhall
-# stew.ravenhall@totalise.co.uk
 # 4 October 2000
 
 # Strip everything between /* and */ inclusive
