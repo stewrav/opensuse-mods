@@ -1,0 +1,17 @@
+#!/bin/sh
+# Spell-check a word
+# (e.g.)
+# sw rhinoceros
+
+if [ "$1" = "" ]
+	then
+		echo 'Usage: sw word'
+	else
+		word=`echo "$1" | spell -b 2> /dev/null`
+		if [ "$word" = "" ]
+			then
+				echo "$1 is spelled correctly."
+			else
+				echo "$1 is not in the dictionary."
+		fi
+fi

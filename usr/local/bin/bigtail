@@ -1,0 +1,9 @@
+#!/usr/bin/sh
+
+# Show the last x lines, where x is specified and can be any sensible number
+
+file=$(wc -l < $2)
+(( start = $file - $1 + 1 ))
+
+[[ $1 -le $file ]] && tail -n +$start $2
+[[ $1 -gt $file ]] && echo 'use a smaller number!'

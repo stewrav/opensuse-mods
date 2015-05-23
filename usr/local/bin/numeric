@@ -1,0 +1,13 @@
+#!/bin/sh
+# Test if argument is numeric
+# Only works for numbers less than (1e31)-2
+if [ "$1" = "" ]
+then
+	filen=`echo $0 | sed -e 's:.*/::'`
+	echo 'Usage:' $filen '$var'
+elif expr $1 + 1 > /dev/null 2> /dev/null
+then
+	echo "$1 is numeric"
+else
+	echo "$1 is not numeric"
+fi

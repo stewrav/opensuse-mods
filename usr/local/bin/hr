@@ -1,0 +1,25 @@
+#!/usr/bin/sh
+# $Source$
+# $Id$
+
+# Show horizontal ruler using the COLUMNS environment variable
+
+typeset -i columns=$COLUMNS
+
+if [[ $1 != "" ]]; then
+	print -u2 "Usage: ${0##*/}"
+	exit 1
+elif [[ ${COLUMNS:-} = "" ]]; then
+	print -u2 "${0##*/}: could not find COLUMNS environment variable"
+	exit 2
+elif [[ $columns != $COLUMNS ]]; then
+	print -u2 "${0##*/}: COLUMNS is not an integer"
+	exit 3
+fi
+
+(( i=0 ))
+until (( i == $columns )); do
+	(( i+=1 ))
+	print -n -- -
+done
+print

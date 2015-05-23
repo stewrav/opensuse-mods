@@ -1,0 +1,86 @@
+#!/usr/bin/sh
+# Change ownership of specified file to current user, if possible
+
+# Create local variables
+typeset file backup rc
+typeset group group_perms ls_data
+typeset -r basename=${0##*/}
+
+# If there were no arguments specified then print usage information
+[[ $# = 0 ]] && {
+        print -u2 "Usage: $basename files"
+        exit 1
+}
+
+function cleanUp {
+        # Remove backup
+        rm 2>&- -f $backup || {
+                print -u2 "$basename: Unable to remove backup file $backup"
+                rc=6
+        }
+}
+
+# Initialise return code
+rc=0
+
+# Loop through each specified file
+for file
+do
+        # create name for temporary backup file in same directory where file is located
+        if [[ $file = ${file##*/} ]]
+        then
+                backup=.${file##*/}.$basename.$$
+        else
+                backup=${file%/*}/.${file##*/}.$basename.$$
+        fi
+
+        # Check that file exists
+        [[ -a $file ]] || {
+                print -u2 "$basename: $file does not exist"
+                exit 2
+        }
+
+        # Check that we have read access to the file
+        [[ -r $file ]] || {
+                chmod 2>&- +r $file || {
+                        print -u2 "$basename: Cannot read $file"
+                        exit 2
+                }
+        }
+
+        # Create backup
+        cp 2>&- -f $file $backup || {
+                print -u2 "$basename: Unable to copy file $file"
+                exit 3
+        }
+
+        # Fix timestamp of backup
+        touch 2>&- -r $file -m $backup || {
+                print -u2 "$basename: Unable change time on file $backup"
+                rc=4
+                cleanUp
+                exit $rc
+        }
+
+        # Save group permissions
+        ls_data=$(ls -gd $file | sed 's/^....\(...\)[^ ]* *[0-9]* *\([^ ]*\).*/\1 \2/')
+        group=$(print -- "$ls_data" | sed 's/.* //')
+        group_perms=$(print -- "$ls_data" | sed 's/ .*//;s/-//g')
+
+        # Copy backup over original
+        cp 2>&- -fp $backup $file || {
+                print -u2 "$basename: Unable to overwrite file $file"
+                rc=5
+                cleanUp
+                exit $rc
+        }
+
+        # Apply group permissions if possible
+        chgrp 2>&- $group $file
+        chmod 2>&- g=$group_perms $file
+
+        cleanUp
+done
+
+exit $rc
+

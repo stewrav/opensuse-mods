@@ -1,0 +1,9 @@
+#!/opt/BIOSTAT/bin/sed -f
+# del_cr: remove carriage returns from the ends of lines
+
+# This turns a DOS text file (ending in CRLF) into
+# a UNIX or VMS text file (ending in LF)
+
+# Alternatively could use tr -d '^M'
+
+s/\r$//

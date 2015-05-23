@@ -1,0 +1,13 @@
+#!/usr/bin/sed -f
+# Strip trailing equals signs and join lines together
+# Used when re-creating RTF files from emails
+:loop
+/=$/{
+s/=$//
+N
+s/\n//
+b loop
+}
+/=20$/{
+s/=20$/\n/
+}

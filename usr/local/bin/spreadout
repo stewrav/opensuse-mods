@@ -1,0 +1,6 @@
+#!/bin/ksh
+# Spread out command options
+# e.g. "spreadout -abc" produces "-a -b -c"
+args=$@
+args=$(echo $args | sed -e ':a' -e 's/-\([^ -]\)\([^ -].*\)/-\1 -\2/g;ta')
+echo $args

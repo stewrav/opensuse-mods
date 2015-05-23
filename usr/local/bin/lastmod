@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Show when a directory was most recently modified, by
+# displaying the file name and last modification date/time
+# of the specified number of most recently modified files
+
+################
+# Configuration
+################
+set -uC
+basename=${0##*/}
+
+################
+# Checking
+################
+if [[ $# -eq 2 ]]; then
+	num=$1
+	dir=$2
+elif [[ $# -eq 1 ]]; then
+	num=1
+	dir=$1
+else
+	print -u2 "Usage: $basename [num] dir"
+	exit 1
+fi
+
+if [[ ! -e $dir ]]; then
+	print -u2 "$basename: $dir does not exist."
+	exit 2
+fi
+
+if [[ $(/opt/BIOSTAT/home/ravenhas/bin/numeric $num) = *not* ]]; then
+	print -u2 "$basename: $num is not numeric"
+	exit 3
+fi
+
+################
+# Action
+################
+find $dir -xdev -type f | xargs filetime | sort -rk2 | head -n $num

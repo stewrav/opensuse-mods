@@ -1,0 +1,15 @@
+#!/bin/ksh
+# Delete last n lines from a file
+if [[ $# != 2 ]]; then
+	print Usage: ${0:##*/} number file
+	exit 1
+else
+	sed -n ":a
+		1,${1}!{
+			P
+			N
+			D
+		}
+		N
+		ba" $2
+fi

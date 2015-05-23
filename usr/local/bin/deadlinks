@@ -1,0 +1,42 @@
+#!/usr/bin/sh
+
+# Show dead symbolic links
+# Checks only current directory, not subdirectory
+# hence quicker
+
+# Specify local variables
+typeset dir
+
+[[ $# -gt 1 ]] && {
+	print -u2 "Usage: ${0##*/} <directory>"
+	exit 1
+}
+
+# Specify default directory as home
+if [[ $1 = "" ]]; then
+	dir=$HOME
+else
+	dir=$1
+fi
+
+[[ -a "$dir" ]] || {
+	print -u2 "${0##*/}: $dir does not exist"
+	exit 2
+}
+
+[[ -d "$dir" ]] || {
+	print -u2 "${0##*/}: $dir is not a directory"
+	exit 3
+}
+
+[[ -r "$dir" ]] || {
+	print -u2 "${0##*/}: $dir cannot be read"
+	exit 4
+}
+
+[[ -x "$dir" ]] || {
+	print -u2 "${0##*/}: $dir cannot be searched"
+	exit 5
+}
+
+find $dir/* -prune -type l ! -path '*/.netscape/lock' -print | perl -nle '-e || print'

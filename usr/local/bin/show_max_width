@@ -1,0 +1,36 @@
+#!/usr/bin/sh
+# Determine logical record length of stdin or of specified file
+# S G Ravenhall
+
+set -uC
+temp=$(mktemp).${0##*/}
+trap "rm -f $temp; exit" 0 1 2 3 15
+
+# Number of output lines
+numoplines=5
+
+sed 's/././g' ${1:-} | nl -ba -w8 | awk '{print $2,$1}' | sort -r | head -n $numoplines >$temp
+
+(( i=0 ))
+while (( $i<$numoplines ))
+do
+
+    (( i+=1 ))
+    ans_plus_newline=$(sed "$i!d" <$temp | awk '{print $1}' | wc -m)
+    (( ans = ans_plus_newline - 1 ))
+
+    if (( $ans<0 ))
+    then
+        print 'No more lines'
+        break
+    fi
+
+    if [[ $i = 1 ]]
+    then
+        print -n -- '---> L'
+    else
+        print -n 'Next l'
+    fi
+    print "ongest line is line $(sed "$i!d" <$temp | awk '{print $2}') with length $ans"
+
+done

@@ -1,0 +1,55 @@
+#!/bin/ksh
+# Show files modified today
+# Like VMS dir/sin
+
+# $Source$
+# $Id$
+
+# Usage: dirsin    : show files in current directory
+#               -r : show files in all directories
+#               -a : show all files in current directory
+#               -u : use last access time instead of last modification time
+#            *.rp8 : show only files that fit specified pattern
+
+# Default options
+u=
+a=
+time=m
+dir=./*
+recurse=n
+
+# Process command line options
+while getopts ":uar" opt; do
+	case $opt in
+		u)	u=u
+			time=a ;;
+
+		a)	dir=.
+			a=a ;;
+
+		r)	recurse=y ;;
+
+		\?)	print >&2 "Usage: ${0##*/} -r(recursive) -a(all) -u(access time)"
+			exit 1 ;;
+
+	esac
+done
+shift $(($OPTIND - 1))
+
+# If filename arguments have been specified then use ls -d
+if [[ "$@" = "" ]]; then
+	d=
+else
+	if [[ $recurse = y ]]; then
+		print >&2 "${0##*/}: cannot process specific files in recursive mode"
+		exit 2
+	fi
+	d=d
+fi
+
+# Show relevant files
+if [[ $recurse = y ]]; then
+	find $dir -${time}time 0 ! -path '*.netscape/cache/*' -exec ls -ld$u {} \; | fgrep "$(date '+%b %d' | sed 's/ 0/  /')"
+else
+	ls -${a}${d}l${u} $@ | sed -n "/$(date '+%b %d' | sed 's/ 0/  /')  *[0-2][0-9]:[0-9]\{2\} /p"
+fi

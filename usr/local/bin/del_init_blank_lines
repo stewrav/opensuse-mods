@@ -1,0 +1,12 @@
+#!/usr/bin/sed -nf
+# sed script to remove initial blank rows
+# Uses standard input and output
+# S G Ravenhall, 15 June 2000
+1{
+	:a
+	/^[ 	]*$/{
+		n
+		ba
+	}
+}
+p

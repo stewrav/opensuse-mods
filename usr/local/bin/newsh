@@ -1,0 +1,86 @@
+#!/usr/bin/sh
+
+if [[ $# != 1 ]]; then
+	print -u2 "Usage: ${0##*/} newfile"
+        exit 1
+fi
+
+if [[ -a $1 ]]; then
+	print -u2 "${0##*/}: $1 exists"
+        exit 2
+fi
+
+# Create new program
+if [[ $1 = *.pl ]]; then
+	cat <<-EOF >$1
+		#!/opt/BIOSTAT/bin/perl
+		# \$Source\$
+		# \$Id\$
+
+		# Be ruthless with syntax
+		use warnings;
+		use strict;
+
+	EOF
+else
+	cat <<-EOF >$1
+		#!/usr/bin/sh
+		# \$Source\$
+		# \$Id\$
+
+		# Specify program locations
+		export PATH=/usr/bin
+
+		# Disallow undefined variables and disallow clobbering of files
+		set -uC
+
+		# Define base script name
+		typeset -r basename=\${0##*/}
+
+		# Specify temporary file space
+		typeset -r temp=\$(mktemp).\${0##*/}.\$\$
+		umask 77
+		>| \$temp || exit 2
+
+		# Clean up temporary file space on script exit
+		trap "rm -f \$temp; exit" 0 1 2 3 15
+
+		# If developing code then we need the following sections
+		########################
+		# Configuration Section
+		########################
+
+		#################
+		# Sensor Section
+		#################
+
+		#####################
+		# Conditions Section
+		#####################
+
+		##################
+		# Actions Section
+		##################
+
+
+		# If testing code then we need the following sections
+		##############
+		# Smoke Tests
+		##############
+
+		#######################
+		# Boundary Value Tests
+		#######################
+
+		#################################################
+		# Various Thorough and Exhaustive Types of Tests
+		#################################################
+
+		####################
+		# Performance Tests
+		####################
+
+	EOF
+fi
+
+chmod 755 $1

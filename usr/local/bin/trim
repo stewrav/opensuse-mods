@@ -1,0 +1,16 @@
+#!/usr/bin/sed -f
+# Removes blank initial lines in a file
+# Uses standard input and output
+# Also removes the very last line if it is blank
+
+${
+	/^$/d
+}
+1{
+	:loop
+	/^$/{
+		N
+		s/\n//
+		b loop
+	}
+}

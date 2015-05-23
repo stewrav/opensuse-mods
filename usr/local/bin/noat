@@ -1,0 +1,32 @@
+#!/bin/csh -f
+# noat: cancel _all_ pending 'at' jobs
+# Stewart Ravenhall, 25 March 1996
+
+# Set number of jobs cancelled to numeric nought
+@ numjobs=0
+
+# Create label to go back to after each cancellation
+again:
+
+# List the jobs to be cancelled
+set listjobs=(`at -l`)
+
+# If there are some jobs to be cancelled
+if ( "$listjobs" != "" ) then
+	# Increment the number of jobs cancelled
+	@ numjobs=$numjobs + 1
+	# Identify the next job to be cancelled
+	set currentjob=(`echo $listjobs[1]`)
+	# Cancel the job
+	at -r "$currentjob"
+	# Check again for more jobs
+	goto again
+endif
+
+if ( "$numjobs" == "0" ) then
+	# If there were no jobs then report this
+	echo "There are no scheduled 'at' jobs."
+else
+	# Report the number of jobs that were cancelled
+	echo "$numjobs 'at' jobs have been cancelled."
+endif

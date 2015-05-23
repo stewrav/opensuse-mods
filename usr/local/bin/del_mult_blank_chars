@@ -1,0 +1,8 @@
+#!/usr/bin/sed -f
+# Turns consecutive blanks on the same line into single blanks
+# Written by Stewart Ravenhall
+:loop
+/  /{
+s/  / /g
+b loop
+}
