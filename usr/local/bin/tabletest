@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 # Table test
 # by S G Ravenhall
-# October-November 2013
+# October 2013 +
 
 use warnings;
 use strict;
@@ -17,6 +17,7 @@ my @tables_a   = (1..12);
 my @tables_b   = (2,3,4,5,6,11);
 my @types      = ('mult','mult','div');
 my $type_index;
+my ($time0, $time1);
 
 # If there is a configuration file then read it in
 my $config = $HOME . '/.tables';
@@ -60,8 +61,12 @@ if ( -e $config ) {
 
 while ( $again =~ m/^y/mi ) {
 
+	$time0 = time();
 	foreach my $test (1..$numtests) {
 	
+		# Found this in a difft version and not sure which is best
+		# my $a = $tables_a[int(rand(scalar @tables_a - 1)) + 1];
+
 		my $a = $tables_a[ rand(@tables_a) ];
 		my $b = $tables_b[ rand(@tables_b) ];
 		my $c = $a * $b;
@@ -106,8 +111,9 @@ while ( $again =~ m/^y/mi ) {
 
 		$type_index += 1;
 	}
+	$time1 = time() - $time0;
 
-	print "You scored $numcorrect out of $numtests\n";
+	print "\nYou scored $numcorrect out of $numtests in $time1 seconds.\n";
 	
 	print "Again? ";
 	$again = <STDIN>;
