@@ -1,9 +1,11 @@
 /*
-  piest : pi estimator
-  gcc -Wall -O3 -o ./piest ./piest.c -lm
+  pi_mc : calculate pi using Monte Carlo estimation
+
+  Do not forget the "-lm" at the end of the compiler command:
+  gcc -Wall -O3 -o ./pi_mc ./pi_mc.c -lm
 */
 
-#define VERSION "1.1"
+#define VERSION "1.2"
 #define ITER_MAX 9999999999
 
 #include <stdio.h>    // printf
