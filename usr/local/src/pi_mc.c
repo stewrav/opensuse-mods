@@ -5,7 +5,7 @@
   gcc -Wall -O3 -o ./pi_mc ./pi_mc.c -lm
 */
 
-#define VERSION "1.1"
+#define VERSION "1.2"
 #define ITER_MAX 9999999999
 
 #include <stdio.h>    // printf
